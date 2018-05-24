@@ -1,0 +1,92 @@
+﻿// Template version 2
+
+author = "SageNTitled of Arma Sweden";				// Namn på utvecklare (ändra till ditt namn).
+onLoadName = "Mountain Fury";					// Namn på scenario.
+onLoadMission = "Beware of the wild goats on the mountains.";	// Beskrivning som visas på laddningsskärm (håll den kort).
+//overviewPicture = "pictures\overviewPicture.jpg";		// Sökväg till overviewPicture (2048x1024) (används ej för tillfället).
+//loadScreen = "pictures\loadScreen.jpg";			// Sökväg till bild på laddningsskärm (2048x1024).
+
+class header{
+	gametype = COOP;	// Speltyp (https://community.bistudio.com/wiki/Multiplayer_Game_Types).
+	minPlayers = 1;		// Minimalt antal spelare.
+	maxPlayers = 24;	// Maximalt antal spelare.
+}
+
+// Respawn för Arma Sweden; ändras ej! (https://community.bistudio.com/wiki/Arma_3_Respawn)
+respawn = 3;										// Typ av respawn.
+respawnDelay = 30;									// Respawn-tid.
+respawnVehicleDelay = 900;								// Respawn-tid för fordon.
+respawnDialog = 0;									// Gömmer poängtavlan.
+respawnTemplates[] = {"Spectator", "CustomWave", "MenuPosition"};			// Tillåter val av respawn-punkt och synkroniserar respawn-tiden hos fallna spelare.
+respawnOnStart = 1;									// Undviker respawn-tid vid spelstart.
+
+// Inställningar; ändras ej!
+disabledAI = 1;			// Stänger av AI-spelare i laget.
+joinUnassigned = 1;		// Hindrar spelare från att automatiskt bli utplacerade i lobbyn.
+enableDebugConsole = 1;		// Aktiverar konsolen för admin.
+
+// Olika avslut för scenariot (anropas med trigger, t.ex:  "win" call BIS_fnc_endMissionServer;  ).
+class CfgDebriefing
+{  
+	class win
+	{
+		title = "Mission completed";
+		subtitle = "All tasks completed";
+		description = "You completed all your tasks. Thanks for playing.";
+		pictureBackground = "";
+		picture = "b_inf";
+		pictureColor[] = {0.0,0.3,0.6,1};
+	};
+	class lose
+	{
+		title = "Mission failed";
+		subtitle = "Everyone are dead";
+		description = "Your squad didn't survive.";
+		pictureBackground = "";
+		picture = "KIA";
+		pictureColor[] = {0.6,0.1,0.2,1};
+	};
+};
+
+// Parametrar för scenariot (ställs in i lobbyn).
+class Params
+{
+	// Farooq's revive-system (vanligtvis avaktiverat); ändras ej!.
+	class Revive
+	{
+		title = "Farooq's revive";
+		values[] = {0,1};
+		texts[] = {"Disabled","Enabled"};
+		default = 0;
+	};
+	// Respawn-tid; ändras ej!
+	class RespawnDelay
+	{
+		title = "Respawn time";
+		values[] = {30, 120, 300, 480};
+		texts[] = {"30-60 seconds", "2-4 minutes", "5-10 minutes", "8-16 minutes"};
+		default = 300;
+		file = "params\setRespawnDelay.sqf";
+	};
+};
+
+// Tillhör respawn-script. Ändras ej!
+class CfgRespawnTemplates
+{
+	class CustomPosition
+	{
+		onPlayerKilled = "respawn\customRespawnPosition.sqf";
+		onPlayerRespawn = "respawn\customRespawnPosition.sqf";
+	};
+
+	class CustomCounter
+	{
+		onPlayerKilled = "respawn\customRespawnCounter.sqf";
+		onPlayerRespawn = "respawn\customRespawnCounter.sqf";
+	};
+	class CustomWave
+	{
+		onPlayerKilled = "respawn\customWave.sqf";
+		onPlayerRespawn = "respawn\customWave.sqf";
+	};
+};

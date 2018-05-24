@@ -1,0 +1,436 @@
+author="SageNTitled of Arma Sweden";
+onLoadName = "Zeus - Tanoa";
+OnLoadMission = "Zeus game master; tailored for the ultimate experience.";
+//overviewPicture = "pictures\overviewPicture.jpg";
+loadScreen = "pictures\loadScreen.jpg";
+
+class header{
+	gametype = Zeus;
+	minPlayers = 1;
+	maxPlayers = 71;
+}
+
+// Respawn för Arma Sweden; ändras ej! (https://community.bistudio.com/wiki/Arma_3_Respawn)
+respawn = 2;										// Typ av respawn.
+respawnDelay = 30;									// Respawn-tid.
+respawnVehicleDelay = 900;								// Respawn-tid för fordon.
+respawnDialog = 0;									// Gömmer poängtavlan.
+respawnTemplates[] = {"MenuPosition", "MenuInventory", "Spectator", "CustomWave"};	// Tillåter val av respawn-punkt och synkroniserar respawn-tiden hos fallna spelare.
+respawnTemplatesVirtual[] = {};
+//respawnOnStart = 0;									// Undviker respawn-tid vid spelstart.
+
+// Inställningar; ändras ej!
+disabledAI = 1;			// Stänger av AI-spelare i laget.
+joinUnassigned = 1;		// Hindrar spelare från att automatiskt bli utplacerade i lobbyn.
+enableDebugConsole = 1;		// Aktiverar konsolen för admin.
+
+// Parameters
+class Params
+{
+	// Farooq's revive-system (vanligtvis avaktiverat); ändras ej!.
+	class Revive
+	{
+		title = "Farooq's revive";
+		values[] = {0,1};
+		texts[] = {"Disabled","Enabled"};
+		default = 0;
+	};
+	// Respawn-tid; ändras ej!
+	class RespawnDelay
+	{
+		title = "Respawn time";
+		values[] = {30, 120, 300, 480};
+		texts[] = {"30-60 seconds", "2-4 minutes", "5-10 minutes", "8-16 minutes"};
+		default = 300;
+		file = "params\setRespawnDelay.sqf";
+	};
+	class CuratorGodMode
+	{
+		title = $STR_A3_MP_ZGM_m11.Altis_Params_CuratorUnlock;
+		values[] = {0,1};
+		texts[] = {$STR_DISABLED,$STR_ENABLED};
+		default = 1;
+	};
+	class CuratorModeratorRights
+	{
+		title = $STR_A3_MP_ZGM_m11.Altis_Params_CuratorModeratorRights;
+		values[] = {-1,0,1,2};
+		texts[] = {
+			"Spectating only",
+			$STR_A3_MP_ZGM_m11.Altis_Params_CuratorModeratorRights_0,
+			$STR_A3_MP_ZGM_m11.Altis_Params_CuratorModeratorRights_1,
+			$STR_A3_MP_ZGM_m11.Altis_Params_CuratorModeratorRights_2
+		};
+		default = -1;
+	};
+	class DebugConsole
+	{
+		title = "Debug console";
+		values[] = {0, 1};
+		texts[] = {"Disabled","Enabled"};
+		default = 1;
+	};
+};
+
+// Tillhör respawn-script. Ändras ej!
+class CfgRespawnTemplates
+{
+	class CustomPosition
+	{
+		onPlayerKilled = "respawn\customRespawnPosition.sqf";
+		onPlayerRespawn = "respawn\customRespawnPosition.sqf";
+	};
+
+	class CustomCounter
+	{
+		onPlayerKilled = "respawn\customRespawnCounter.sqf";
+		onPlayerRespawn = "respawn\customRespawnCounter.sqf";
+	};
+	class CustomWave
+	{
+		onPlayerKilled = "respawn\customWave.sqf";
+		onPlayerRespawn = "respawn\customWave.sqf";
+	};
+};
+
+// Loadouts
+class CfgRespawnInventory
+{
+	class WEST1
+	{
+		displayName = "Ammo bearer"; // Name visible in the menu
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa"; // Icon displayed next to the name
+		role = "Support";
+
+		// Exported from Arsenal by SageNTitled
+		uniformClass = "SAM_Crye_M90_uniform";
+		backpack = "SAM_Kitbag_rgr";
+		weapons[] = {"SAM_AK5D_NOGRIP","CUP_hgun_Glock17","Throw","Put"};
+		magazines[] = {"Chemlight_yellow","Chemlight_blue","sam_chgr96","B_IR_Grenade","sam_chgr96","sam_hgr90","sam_hgr90","sam_rhgr5","sam_rhgr5","sam_rhgr5","SmokeShellBlue","sam_rhgr5","sam_rhgr5","CUP_17Rnd_9x19_glock17","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_200Rnd_556x45","SAM_99Rnd_762x51","SAM_99Rnd_762x51","SAM_99Rnd_762x51","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T"};
+		items[] = {"FirstAidKit","FirstAidKit","FirstAidKit","NVGoggles_OPFOR","ACE_IR_Strobe_Item"};
+		linkedItems[] = {"SAM_PlateCarrier","SAM_HelmetIA_M90","","ItemMap","ItemCompass","ItemWatch","ItemRadio","ItemGPS","acc_flashlight","sam_acco_aimpoint"};
+	};
+	class WEST2
+	{
+		displayName = "Asst. AT (M3 MAAWS)"; // Name visible in the menu
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa"; // Icon displayed next to the name
+		role = "Support";
+
+		// Exported from Arsenal by SageNTitled
+		uniformClass = "SAM_Crye_M90_uniform";
+		backpack = "SAM_Kitbag_rgr";
+		weapons[] = {"SAM_AK5D_NOGRIP","CUP_hgun_Glock17","Binocular","Throw","Put"};
+		magazines[] = {"Chemlight_yellow","Chemlight_blue","sam_chgr96","B_IR_Grenade","sam_chgr96","sam_hgr90","sam_hgr90","sam_rhgr5","sam_rhgr5","sam_rhgr5","SmokeShellBlue","sam_rhgr5","sam_rhgr5","CUP_17Rnd_9x19_glock17","CUP_17Rnd_9x19_glock17","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","tf47_m3maaws_HEAT","tf47_m3maaws_HEDP","tf47_m3maaws_HEDP"};
+		items[] = {"FirstAidKit","FirstAidKit","FirstAidKit","NVGoggles_OPFOR","ACE_IR_Strobe_Item"};
+		linkedItems[] = {"SAM_PlateCarrier","SAM_HelmetIA_M90","","ItemMap","ItemCompass","ItemWatch","ItemRadio","ItemGPS","acc_flashlight","sam_acco_aimpoint"};
+	};
+	class WEST3
+	{
+		displayName = "Asst. Autorifleman"; // Name visible in the menu
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa"; // Icon displayed next to the name
+		role = "Support";
+
+		// Exported from Arsenal by SageNTitled
+		uniformClass = "SAM_Crye_M90_uniform";
+		backpack = "SAM_Kitbag_rgr";
+		weapons[] = {"SAM_AK5D_NOGRIP","CUP_hgun_Glock17","Binocular","Throw","Put"};
+		magazines[] = {"Chemlight_yellow","Chemlight_blue","sam_chgr96","B_IR_Grenade","sam_chgr96","sam_hgr90","sam_hgr90","sam_rhgr5","sam_rhgr5","sam_rhgr5","SmokeShellBlue","sam_rhgr5","sam_rhgr5","CUP_17Rnd_9x19_glock17","CUP_17Rnd_9x19_glock17","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_200Rnd_556x45","SAM_200Rnd_556x45","SAM_200Rnd_556x45","SAM_200Rnd_556x45"};
+		items[] = {"FirstAidKit","FirstAidKit","FirstAidKit","NVGoggles_OPFOR","ACE_IR_Strobe_Item"};
+		linkedItems[] = {"SAM_PlateCarrier","SAM_HelmetIA_M90","","ItemMap","ItemCompass","ItemWatch","ItemRadio","ItemGPS","acc_flashlight","sam_acco_aimpoint"};
+	};
+	class WEST4
+	{
+		displayName = "Asst. Heavy Gunner"; // Name visible in the menu
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa"; // Icon displayed next to the name
+		role = "Support";
+
+		// Exported from Arsenal by SageNTitled
+		uniformClass = "SAM_Crye_M90_uniform";
+		backpack = "SAM_Kitbag_rgr";
+		weapons[] = {"SAM_AK5D_NOGRIP","CUP_hgun_Glock17","Binocular","Throw","Put"};
+		magazines[] = {"Chemlight_yellow","Chemlight_blue","sam_chgr96","B_IR_Grenade","sam_chgr96","sam_hgr90","sam_hgr90","sam_rhgr5","sam_rhgr5","sam_rhgr5","SmokeShellBlue","sam_rhgr5","sam_rhgr5","CUP_17Rnd_9x19_glock17","CUP_17Rnd_9x19_glock17","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_49Rnd_762x51","SAM_49Rnd_762x51","SAM_49Rnd_762x51","SAM_49Rnd_762x51","SAM_49Rnd_762x51","SAM_49Rnd_762x51","SAM_49Rnd_762x51","SAM_49Rnd_762x51"};
+		items[] = {"FirstAidKit","FirstAidKit","FirstAidKit","NVGoggles_OPFOR","ACE_IR_Strobe_Item"};
+		linkedItems[] = {"SAM_PlateCarrier","SAM_HelmetIA_M90","ItemMap","ItemCompass","ItemWatch","ItemRadio","ItemGPS","acc_flashlight","sam_acco_aimpoint"};
+	};
+	class WEST5
+	{
+		displayName = "Autorifleman"; // Name visible in the menu
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa"; // Icon displayed next to the name
+		role = "Assault";
+
+		// Exported from Arsenal by SageNTitled
+		uniformClass = "SAM_Crye_M90_uniform";
+		backpack = "SAM_Kitbag_rgr";
+		weapons[] = {"SAM_KSP90C","CUP_hgun_Glock17","Throw","Put"};
+		magazines[] = {"Chemlight_yellow","Chemlight_blue","sam_chgr96","B_IR_Grenade","sam_hgr90","sam_hgr90","sam_rhgr5","sam_rhgr5","sam_rhgr5","SmokeShellBlue","sam_rhgr5","sam_rhgr5","CUP_17Rnd_9x19_glock17","CUP_17Rnd_9x19_glock17","SAM_100Rnd_556x45","SAM_100Rnd_556x45","SAM_200Rnd_556x45","SAM_200Rnd_556x45"};
+		items[] = {"FirstAidKit","FirstAidKit","FirstAidKit","NVGoggles_OPFOR","ACE_IR_Strobe_Item"};
+		linkedItems[] = {"SAM_PlateCarrier","SAM_HelmetIA_M90","","ItemMap","ItemCompass","ItemWatch","ItemRadio","ItemGPS","acc_flashlight","sam_acco_aimpoint"};
+	};
+	class WEST6
+	{
+		displayName = "Combat Life Saver"; // Name visible in the menu
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa"; // Icon displayed next to the name
+		role = "Support";
+
+		// Exported from Arsenal by SageNTitled
+		uniformClass = "SAM_Crye_M90_uniform";
+		backpack = "SAM_Kitbag_rgr";
+		weapons[] = {"SAM_AK5D_NOGRIP","CUP_hgun_Glock17","Throw","Put"};
+		magazines[] = {"Chemlight_yellow","Chemlight_blue","sam_hgr90","sam_hgr90","sam_rhgr5","sam_rhgr5","sam_rhgr5","SmokeShellBlue","sam_rhgr5","sam_rhgr5","CUP_17Rnd_9x19_glock17","CUP_17Rnd_9x19_glock17","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T"};
+		items[] = {"FirstAidKit","FirstAidKit","FirstAidKit","FirstAidKit","Medikit","FirstAidKit","FirstAidKit","FirstAidKit","FirstAidKit","FirstAidKit","FirstAidKit","NVGoggles_OPFOR","ACE_IR_Strobe_Item"};
+		linkedItems[] = {"SAM_PlateCarrier","SAM_HelmetIA_M90","","ItemMap","ItemCompass","ItemWatch","ItemRadio","ItemGPS","acc_flashlight","sam_acco_aimpoint"};
+	};
+	class WEST7
+	{
+		displayName = "Crewman"; // Name visible in the menu
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa"; // Icon displayed next to the name
+		role = "Vehicle";
+
+		// Exported from Arsenal by SageNTitled
+		uniformClass = "SAM_Crye_M90_uniform";
+		backpack = "";
+		weapons[] = {"SAM_AK5D_NOGRIP","CUP_hgun_Glock17","Binocular","Throw","Put"};
+		magazines[] = {"Chemlight_yellow","Chemlight_blue","sam_chgr96","B_IR_Grenade","sam_chgr96","sam_hgr90","sam_hgr90","sam_rhgr5","sam_rhgr5","sam_rhgr5","SmokeShellBlue","sam_rhgr5","sam_rhgr5","CUP_17Rnd_9x19_glock17","CUP_17Rnd_9x19_glock17","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T"};
+		items[] = {"FirstAidKit","FirstAidKit","FirstAidKit","NVGoggles_OPFOR","ACE_IR_Strobe_Item"};
+		linkedItems[] = {"SAM_PlateCarrier","H_HelmetCrew_I","","ItemMap","ItemCompass","ItemWatch","ItemRadio","ItemGPS","acc_flashlight","sam_acco_aimpoint"};
+	};
+	class WEST8
+	{
+		displayName = "Engineer"; // Name visible in the menu
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa"; // Icon displayed next to the name
+		role = "Support";
+		
+		// Exported from Arsenal by SageNTitled
+		uniformClass = "SAM_Crye_M90_uniform";
+		backpack = "SAM_Kitbag_rgr";
+		weapons[] = {"SAM_AK5D_NOGRIP","CUP_hgun_Glock17","Throw","Put"};
+		magazines[] = {"Chemlight_yellow","Chemlight_blue","sam_chgr96","B_IR_Grenade","sam_chgr96","sam_hgr90","sam_hgr90","sam_rhgr5","sam_rhgr5","sam_rhgr5","SmokeShellBlue","sam_rhgr5","sam_rhgr5","CUP_17Rnd_9x19_glock17","CUP_17Rnd_9x19_glock17","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","DemoCharge_Remote_Mag","DemoCharge_Remote_Mag","DemoCharge_Remote_Mag"};
+		items[] = {"FirstAidKit","FirstAidKit","FirstAidKit","ToolKit","MineDetector","NVGoggles_OPFOR","ACE_IR_Strobe_Item"};
+		linkedItems[] = {"SAM_PlateCarrier","SAM_HelmetIA_M90","","ItemMap","ItemCompass","ItemWatch","ItemRadio","ItemGPS","acc_flashlight","sam_acco_aimpoint"};
+	};
+	class WEST9
+	{
+		displayName = "Grenadier"; // Name visible in the menu
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa"; // Icon displayed next to the name
+		role = "Assault";
+
+		// Exported from Arsenal by SageNTitled
+		uniformClass = "SAM_Crye_M90_uniform";
+		backpack = "";
+		weapons[] = {"SAM_AK5C_GRT","CUP_hgun_Glock17","Throw","Put"};
+		magazines[] = {"Chemlight_yellow","Chemlight_blue","sam_chgr96","B_IR_Grenade","sam_hgr90","sam_hgr90","sam_rhgr5","sam_rhgr5","sam_rhgr5","SmokeShellBlue","CUP_17Rnd_9x19_glock17","CUP_17Rnd_9x19_glock17","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","1Rnd_HE_Grenade_shell","1Rnd_HE_Grenade_shell","1Rnd_HE_Grenade_shell","1Rnd_HE_Grenade_shell","1Rnd_HE_Grenade_shell","1Rnd_HE_Grenade_shell","1Rnd_HE_Grenade_shell"};
+		items[] = {"FirstAidKit","FirstAidKit","FirstAidKit","NVGoggles_OPFOR","ACE_IR_Strobe_Item"};
+		linkedItems[] = {"SAM_PlateCarrier","SAM_HelmetIA_M90","","ItemMap","ItemCompass","ItemWatch","ItemRadio","ItemGPS","acc_flashlight","sam_acco_aimpoint"};
+	};
+	class WEST10
+	{
+		displayName = "Heavy Gunner"; // Name visible in the menu
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa"; // Icon displayed next to the name
+		role = "Assault";
+
+		// Exported from Arsenal by SageNTitled
+		uniformClass = "SAM_Crye_M90_uniform";
+		backpack = "";
+		weapons[] = {"SAM_KSP58B2","CUP_hgun_Glock17","Throw","Put"};
+		magazines[] = {"Chemlight_yellow","Chemlight_blue","sam_chgr96","B_IR_Grenade","sam_hgr90","sam_hgr90","sam_rhgr5","sam_rhgr5","sam_rhgr5","SmokeShellBlue","sam_rhgr5","sam_rhgr5","CUP_17Rnd_9x19_glock17","SAM_99Rnd_762x51_T","SAM_99Rnd_762x51_T"};
+		items[] = {"FirstAidKit","FirstAidKit","FirstAidKit","NVGoggles_OPFOR","ACE_IR_Strobe_Item"};
+		linkedItems[] = {"SAM_PlateCarrier","SAM_HelmetIA_M90","","ItemMap","ItemCompass","ItemWatch","ItemRadio","ItemGPS","sam_acco_aimpoint"};
+	};
+	class WEST11
+	{
+		displayName = "Marksman"; // Name visible in the menu
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa"; // Icon displayed next to the name
+		role = "Assault";
+		
+		// Exported from Arsenal by SageNTitled
+		uniformClass = "SAM_Crye_M90_uniform";
+		backpack = "";
+		weapons[] = {"CUP_hgun_Glock17","SAM_AK4B_SPEC","Throw","Put"};
+		magazines[] = {"Chemlight_yellow","Chemlight_blue","sam_20Rnd_762x51_mag","sam_chgr96","B_IR_Grenade","sam_chgr96","sam_hgr90","sam_hgr90","sam_rhgr5","sam_rhgr5","sam_rhgr5","SmokeShellBlue","sam_rhgr5","sam_rhgr5","CUP_17Rnd_9x19_glock17","CUP_17Rnd_9x19_glock17","sam_20Rnd_762x51_mag","sam_20Rnd_762x51_mag","sam_20Rnd_762x51_mag","sam_20Rnd_762x51_mag","sam_20Rnd_762x51_mag"};
+		items[] = {"FirstAidKit","FirstAidKit","FirstAidKit","NVGoggles_OPFOR","ACE_IR_Strobe_Item"};
+		linkedItems[] = {"SAM_PlateCarrier","SAM_HelmetIA_M90","","ItemMap","ItemCompass","ItemWatch","ItemRadio","ItemGPS","sam_acco_aimpoint_3x"};
+	};
+	class WEST12
+	{
+		displayName = "Rifleman (AT4 HEDP)"; // Name visible in the menu
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa"; // Icon displayed next to the name
+		role = "Assault";
+
+		// Exported from Arsenal by SageNTitled
+		uniformClass = "SAM_Crye_M90_uniform";
+		backpack = "";
+		weapons[] = {"SAM_AK5D","tf47_at4_HEDP","CUP_hgun_Glock17","Throw","Put"};
+		magazines[] = {"Chemlight_yellow","Chemlight_blue","sam_chgr96","B_IR_Grenade","sam_chgr96","sam_hgr90","sam_hgr90","sam_rhgr5","sam_rhgr5","sam_rhgr5","SmokeShellBlue","sam_rhgr5","sam_rhgr5","CUP_17Rnd_9x19_glock17","CUP_17Rnd_9x19_glock17","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T"};
+		items[] = {"FirstAidKit","FirstAidKit","FirstAidKit","NVGoggles_OPFOR","ACE_IR_Strobe_Item"};
+		linkedItems[] = {"SAM_PlateCarrier","SAM_HelmetIA_M90","","ItemMap","ItemCompass","ItemWatch","ItemRadio","ItemGPS","acc_flashlight","sam_acco_aimpoint"};
+	};
+	class WEST13
+	{
+		displayName = "Rifleman (M3 MAAWS)"; // Name visible in the menu
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa"; // Icon displayed next to the name
+		role = "Assault";
+
+		// Exported from Arsenal by SageNTitled
+		uniformClass = "SAM_Crye_M90_uniform";
+		backpack = "SAM_Kitbag_rgr";
+		weapons[] = {"SAM_AK5D","tf47_m3maaws","CUP_hgun_Glock17","Throw","Put"};
+		magazines[] = {"Chemlight_yellow","Chemlight_blue","sam_chgr96","sam_hgr90","sam_hgr90","sam_rhgr5","sam_rhgr5","sam_rhgr5","SmokeShellBlue","sam_rhgr5","CUP_17Rnd_9x19_glock17","CUP_17Rnd_9x19_glock17","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","tf47_m3maaws_HEDP","tf47_m3maaws_HEDP","tf47_m3maaws_HEAT"};
+		items[] = {"FirstAidKit","FirstAidKit","FirstAidKit","NVGoggles_OPFOR","ACE_IR_Strobe_Item"};
+		linkedItems[] = {"SAM_PlateCarrier","SAM_HelmetIA_M90","","ItemMap","ItemCompass","ItemWatch","ItemRadio","ItemGPS","acc_flashlight","sam_acco_aimpoint"};
+	};
+	class WEST14
+	{
+		displayName = "Rifleman"; // Name visible in the menu
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa"; // Icon displayed next to the name
+		role = "Assault";
+		
+		// Exported from Arsenal by SageNTitled
+		uniformClass = "SAM_Crye_M90_uniform";
+		backpack = "";
+		weapons[] = {"SAM_AK5D","CUP_hgun_Glock17","Throw","Put"};
+		magazines[] = {"Chemlight_yellow","Chemlight_blue","sam_chgr96","B_IR_Grenade","sam_chgr96","sam_hgr90","sam_hgr90","sam_rhgr5","sam_rhgr5","sam_rhgr5","SmokeShellBlue","sam_rhgr5","sam_rhgr5","CUP_17Rnd_9x19_glock17","CUP_17Rnd_9x19_glock17","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T"};
+		items[] = {"FirstAidKit","FirstAidKit","FirstAidKit","NVGoggles_OPFOR","ACE_IR_Strobe_Item"};
+		linkedItems[] = {"SAM_PlateCarrier","SAM_HelmetIA_M90","","ItemMap","ItemCompass","ItemWatch","ItemRadio","ItemGPS","acc_flashlight","sam_acco_aimpoint"};
+	};
+	class WEST15
+	{
+		displayName = "Squad Leader"; // Name visible in the menu
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa"; // Icon displayed next to the name
+		role = "Leader";
+		
+		// Exported from Arsenal by SageNTitled
+		uniformClass = "SAM_Crye_M90_uniform_r";
+		backpack = "tf_rt1523g_fabric";
+		weapons[] = {"SAM_AK5D","CUP_hgun_Glock17","Binocular","Throw","Put"};
+		magazines[] = {"Chemlight_yellow","Chemlight_blue","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","sam_chgr96","B_IR_Grenade","sam_chgr96","sam_hgr90","sam_hgr90","sam_rhgr5","sam_rhgr5","sam_rhgr5","SmokeShellBlue","sam_rhgr5","sam_rhgr5","CUP_17Rnd_9x19_glock17","CUP_17Rnd_9x19_glock17"};
+		items[] = {"FirstAidKit","FirstAidKit","FirstAidKit","NVGoggles_OPFOR","ACE_IR_Strobe_Item"};
+		linkedItems[] = {"SAM_PlateCarrier","SAM_HelmetIA_M90","","ItemMap","ItemCompass","ItemWatch","ItemRadio","ItemGPS","acc_flashlight","sam_acco_aimpoint"};
+	};
+	class WEST16
+	{
+		displayName = "Helicopter Pilot"; // Name visible in the menu
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa"; // Icon displayed next to the name
+		role = "Vehicle";
+		
+		// Exported from Arsenal by SageNTitled
+		uniformClass = "U_B_HeliPilotCoveralls";
+		backpack = "tf_rt1523g_fabric";
+		weapons[] = {"SAM_AK5D_NOGRIP","Throw","Put"};
+		magazines[] = {"Chemlight_yellow","Chemlight_blue","SmokeShell","SmokeShell","SmokeShellBlue","SmokeShellBlue","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T"};
+		items[] = {"FirstAidKit","FirstAidKit","FirstAidKit","FirstAidKit"};
+		linkedItems[] = {"V_Chestrig_oli","H_PilotHelmetHeli_B","","ItemMap","ItemCompass","ItemWatch","ItemRadio","ItemGPS","NVGoggles_OPFOR","acc_flashlight"};
+	};
+	class WEST17
+	{
+		displayName = "Fixed Wing Pilot"; // Name visible in the menu
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa"; // Icon displayed next to the name
+		role = "Vehicle";
+		
+		// Exported from Arsenal by SageNTitled
+		uniformClass = "U_B_PilotCoveralls";
+		backpack = "tf_rt1523g_fabric";
+		weapons[] = {"SAM_AK5D_NOGRIP","Throw","Put"};
+		magazines[] = {"Chemlight_yellow","Chemlight_blue","SmokeShell","SmokeShellBlue","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T"};
+		items[] = {"FirstAidKit","FirstAidKit"};
+		linkedItems[] = {"","H_PilotHelmetFighter_B","","ItemMap","ItemCompass","ItemWatch","ItemRadio","ItemGPS","acc_flashlight","NVGoggles_OPFOR"};
+	};
+	class WEST18
+	{
+		displayName = "Sharpshooter"; // Name visible in the menu
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa"; // Icon displayed next to the name
+		role = "Assault";
+
+		// Exported from Arsenal by SageNTitled
+		uniformClass = "SAM_Crye_M90_uniform";
+		backpack = "";
+		weapons[] = {"SAM_PSG90A","CUP_hgun_Glock17","Binocular","Throw","Put"};
+		magazines[] = {"Chemlight_yellow","Chemlight_blue","16Rnd_9x21_yellow_Mag","sam_rhgr5","sam_rhgr5","sam_rhgr5","SmokeShellBlue","sam_rhgr5","sam_rhgr5","sam_9Rnd_762x51_mag","sam_9Rnd_762x51_mag","sam_9Rnd_762x51_mag","sam_9Rnd_762x51_mag","sam_9Rnd_762x51_mag","16Rnd_9x21_yellow_Mag","16Rnd_9x21_yellow_Mag","sam_9Rnd_762x51_mag","sam_9Rnd_762x51_mag","sam_9Rnd_762x51_mag","sam_rhgr5","sam_rhgr5"};
+		items[] = {"FirstAidKit","FirstAidKit","FirstAidKit","NVGoggles_OPFOR","ACE_IR_Strobe_Item"};
+		linkedItems[] = {"SAM_PlateCarrier","SAM_HelmetIA_M90","","ItemMap","ItemCompass","ItemWatch","ItemRadio","ItemGPS","sam_acco_ks90b"};
+	};
+	class WEST19
+	{
+		displayName = "Officer"; // Name visible in the menu
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa"; // Icon displayed next to the name
+		role = "Leader";
+
+		// Exported from Arsenal by SageNTitled
+		uniformClass = "SAM_Crye_M90_uniform_r";
+		backpack = "tf_rt1523g_fabric";
+		weapons[] = {"SAM_AK5D","CUP_hgun_Glock17","Rangefinder","Throw","Put"};
+		magazines[] = {"Chemlight_yellow","Chemlight_blue","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","sam_chgr96","B_IR_Grenade","sam_chgr96","sam_hgr90","sam_hgr90","sam_rhgr5","sam_rhgr5","sam_rhgr5","SmokeShellBlue","sam_rhgr5","sam_rhgr5","CUP_17Rnd_9x19_glock17","CUP_17Rnd_9x19_glock17"};
+		items[] = {"FirstAidKit","FirstAidKit","FirstAidKit","NVGoggles_OPFOR","ACE_IR_Strobe_Item"};
+		linkedItems[] = {"SAM_PlateCarrier","H_Beret_Colonel","","ItemMap","ItemCompass","ItemWatch","ItemRadio","ItemGPS","acc_flashlight","sam_acco_aimpoint"};
+	};
+	class WEST20
+	{
+		displayName = "Spotter"; // Name visible in the menu
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa"; // Icon displayed next to the name
+		role = "Recon";
+
+		// Exported from Arsenal by SageNTitled
+		uniformClass = "SAM_Crye_M90_uniform";
+		backpack = "SAM_Kitbag_rgr";
+		weapons[] = {"SAM_AK5D","CUP_hgun_Glock17","Rangefinder","Throw","Put"};
+		magazines[] = {"Chemlight_yellow","Chemlight_blue","sam_chgr96","B_IR_Grenade","sam_chgr96","sam_hgr90","sam_hgr90","sam_rhgr5","sam_rhgr5","sam_rhgr5","SmokeShellBlue","sam_rhgr5","sam_rhgr5","CUP_17Rnd_9x19_glock17","CUP_17Rnd_9x19_glock17","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","sam_9Rnd_762x51_mag","sam_9Rnd_762x51_mag","sam_9Rnd_762x51_mag","sam_9Rnd_762x51_mag","sam_9Rnd_762x51_mag","sam_9Rnd_762x51_mag","SmokeShellBlue","SmokeShellBlue","SmokeShellBlue","SmokeShellYellow","SmokeShellYellow","SmokeShellYellow"};
+		items[] = {"FirstAidKit","FirstAidKit","FirstAidKit","NVGoggles_OPFOR","ACE_IR_Strobe_Item"};
+		linkedItems[] = {"SAM_PlateCarrier","SAM_HelmetIA_M90","","ItemMap","ItemCompass","ItemWatch","ItemRadio","ItemGPS","acc_flashlight","sam_acco_aimpoint_3x"};
+	};
+	class WEST21
+	{
+		displayName = "Sniper"; // Name visible in the menu
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa"; // Icon displayed next to the name
+		role = "Recon";
+
+		// Exported from Arsenal by SageNTitled
+		uniformClass = "SAM_Crye_M90_ghillie";
+		backpack = "";
+		weapons[] = {"CUP_srifle_M107_Base","CUP_hgun_Glock17","Throw","Put","Rangefinder"};
+		magazines[] = {"Chemlight_blue","B_IR_Grenade","CUP_17Rnd_9x19_glock17","CUP_17Rnd_9x19_glock17","CUP_17Rnd_9x19_glock17","CUP_17Rnd_9x19_glock17","CUP_17Rnd_9x19_glock17","CUP_10Rnd_127x99_M107","CUP_10Rnd_127x99_M107","CUP_10Rnd_127x99_M107","CUP_10Rnd_127x99_M107","CUP_10Rnd_127x99_M107","SmokeShellBlue","SmokeShellBlue","sam_rhgr5","sam_rhgr5"};
+		items[] = {"FirstAidKit","FirstAidKit","FirstAidKit","NVGoggles_OPFOR","ACE_IR_Strobe_Item","ACE_ATragMX","ACE_Kestrel4500","ACE_RangeCard"};
+		linkedItems[] = {"V_Chestrig_rgr","ItemMap","ItemCompass","ItemWatch","ItemRadio","ItemGPS","optic_LRPS"};
+	};
+    class WEST22
+    {
+        displayName = "JTAC"; // Name visible in the menu
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\sergeant_gs.paa"; // Icon displayed next to the name
+		role = "Recon";
+        
+        // Exported from Arsenal by SageNTitled
+        uniformClass = "SAM_Crye_M90k_uniform";
+        backpack = "";
+        weapons[] = {"SAM_AK5C_NOGRIP","Laserdesignator_03","Throw","Put","Laserdesignator"};
+        magazines[] = {"Chemlight_blue","sam_rhgr5","sam_rhgr5","sam_rhgr5","sam_rhgr5","sam_hgr90","B_IR_Grenade","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T","SAM_30Rnd_556x45_Pmag_T"};
+        items[] = {"FirstAidKit","FirstAidKit","FirstAidKit","NVGoggles_OPFOR","ACE_IR_Strobe_Item"};
+        linkedItems[] = {"SAM_PlateCarrier","SAM_HelmetIA_M90K","","ItemMap","ItemCompass","ItemWatch","ItemRadio","ItemGPS","sam_acco_aimpoint"};
+    };
+};
+
+class CfgRoles
+{
+	class Assault
+	{
+		displayName = "Assault";
+		icon = "\A3\Ui_f\data\GUI\Cfg\RespawnRoles\assault_ca.paa";
+	};
+	class Recon
+	{
+		displayName = "Recon";
+		icon = "\A3\Ui_f\data\GUI\Cfg\RespawnRoles\recon_ca.paa";
+	};
+	class Support
+	{
+		displayName = "Support";
+		icon = "\A3\Ui_f\data\GUI\Cfg\RespawnRoles\support_ca.paa";
+	};
+	class Leader
+	{
+		displayName = "Leader";
+		icon = "\A3\Ui_f\data\GUI\Cfg\Ranks\general_gs.paa";
+	};
+	class Vehicle
+	{
+		displayName = "Vehicle crew";
+		icon = "\A3\Ui_f\data\GUI\Cfg\CommunicationMenu\transport_ca.paa";
+	};
+};
